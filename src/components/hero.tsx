@@ -2,7 +2,7 @@ export function Hero() {
   return (
     <section className="py-16">
       <h1 className="font-serif text-4xl sm:text-5xl font-normal tracking-tight mb-4">
-        hi, kush here. 👋
+        Kush Singhy
       </h1>
       <p className="text-muted text-base leading-relaxed max-w-lg">
         Software engineer and runner. I build things for the web and chase

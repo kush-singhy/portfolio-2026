@@ -12,9 +12,6 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border">
       <nav className="max-w-2xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link href="/" className="font-serif font-normal tracking-tight text-lg">
-          kush
-        </Link>
         <div className="flex items-center gap-6">
           {navItems.map((item) => (
             <Link
@@ -25,8 +22,8 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <ThemeToggle />
         </div>
+        <ThemeToggle />
       </nav>
     </header>
   );
