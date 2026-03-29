@@ -1,8 +1,7 @@
 import { RunsPageContent } from "@/components/runs-page-content";
 
 export const metadata = {
-  title: "Runs — Kush",
-  description: "Personal bests, recent runs, and race results.",
+  title: "Kush Singhy",
 };
 
 export default function RunsPage() {

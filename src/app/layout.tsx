@@ -17,8 +17,7 @@ const calistoga = Calistoga({
 });
 
 export const metadata: Metadata = {
-  title: "Kush — Portfolio",
-  description: "Software engineer, runner, and builder.",
+  title: "Kush Singhy",
 };
 
 export default function RootLayout({

@@ -2,8 +2,7 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 
 export const metadata = {
-  title: "Blog — Kush",
-  description: "Thoughts on software, running, and building things.",
+  title: "Kush Singhy",
 };
 
 export default function BlogPage() {
