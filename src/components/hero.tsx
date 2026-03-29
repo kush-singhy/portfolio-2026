@@ -36,67 +36,80 @@ function getAge(): number {
   return age;
 }
 
+function HeroPhoto() {
+  return (
+    <Image
+      src="/smiling-photo.jpg"
+      alt="Kush Singhy"
+      width={160}
+      height={192}
+      className="w-full h-full object-cover"
+      priority
+    />
+  );
+}
+
 export function Hero() {
   return (
-    <section className="py-16 flex items-start justify-between gap-8">
-      <div className="min-w-0">
-        <h1 className="font-serif text-4xl sm:text-5xl font-normal tracking-tight mb-3">
-          Kush Singhy
-        </h1>
-        <p className="text-muted text-base mb-4">
-          {getAge()}yo Software Engineer from Sydney
-        </p>
-        <p className="text-base leading-snug max-w-sm">
-          I like coding and running so I coded a website to show my runs
-          (and other things about me).
-        </p>
-        <div className="flex items-center gap-4 mt-6">
-          <a
-            href="https://github.com/kush-singhy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted hover:text-foreground transition-colors"
-            aria-label="GitHub"
-          >
-            <GitHubIcon size={20} />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/kush-singhy/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted hover:text-foreground transition-colors"
-            aria-label="LinkedIn"
-          >
-            <LinkedInIcon size={20} />
-          </a>
-          <a
-            href="https://www.strava.com/athletes/141731320"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted hover:text-foreground transition-colors"
-            aria-label="Strava"
-          >
-            <StravaIcon size={20} />
-          </a>
-          <a
-            href="mailto:kushsinghy02@gmail.com"
-            className="text-muted hover:text-foreground transition-colors"
-            aria-label="Email"
-          >
-            <Mail size={20} />
-          </a>
+    <section className="py-16">
+      <div className="flex justify-center sm:hidden mb-12">
+        <div className="w-36 h-44 rounded-xl border border-border bg-card rotate-3 overflow-hidden">
+          <HeroPhoto />
         </div>
       </div>
-      <div className="hidden sm:block shrink-0">
-        <div className="w-40 h-48 rounded-xl border border-border bg-card rotate-3 overflow-hidden">
-          <Image
-            src="/smiling-photo.jpg"
-            alt="Kush Singhy"
-            width={160}
-            height={192}
-            className="w-full h-full object-cover"
-            priority
-          />
+      <div className="flex items-start justify-between gap-8">
+        <div className="min-w-0">
+          <h1 className="font-serif text-4xl sm:text-5xl font-normal tracking-tight mb-3">
+            Kush Singhy
+          </h1>
+          <p className="text-muted text-base mb-4">
+            {getAge()}yo Software Engineer from Sydney
+          </p>
+          <p className="text-base leading-snug max-w-sm">
+            I like coding and running so I coded a website to show my runs
+            (and other things about me).
+          </p>
+          <div className="flex items-center gap-4 mt-6">
+            <a
+              href="https://github.com/kush-singhy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-foreground transition-colors"
+              aria-label="GitHub"
+            >
+              <GitHubIcon size={20} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/kush-singhy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-foreground transition-colors"
+              aria-label="LinkedIn"
+            >
+              <LinkedInIcon size={20} />
+            </a>
+            <a
+              href="https://www.strava.com/athletes/141731320"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-foreground transition-colors"
+              aria-label="Strava"
+            >
+              <StravaIcon size={20} />
+            </a>
+            <a
+              href="mailto:kushsinghy02@gmail.com"
+              className="text-muted hover:text-foreground transition-colors"
+              aria-label="Email"
+            >
+              <Mail size={20} />
+            </a>
+          </div>
+        </div>
+        <div className="hidden sm:block shrink-0">
+          <div className="w-40 h-48 rounded-xl border border-border bg-card rotate-3 overflow-hidden">
+            <HeroPhoto />
+          </div>
         </div>
       </div>
     </section>
