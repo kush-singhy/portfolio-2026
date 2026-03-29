@@ -46,9 +46,9 @@ export function Hero() {
         <p className="text-muted text-base mb-4">
           {getAge()}yo Software Engineer from Sydney
         </p>
-        <p className="text-base leading-relaxed max-w-sm">
-          I like coding and running so I coded a website to show off my runs
-          (and other things I&apos;m interested in).
+        <p className="text-base leading-snug max-w-sm">
+          I like coding and running so I coded a website to show my runs
+          (and other things about me).
         </p>
         <div className="flex items-center gap-4 mt-6">
           <a
