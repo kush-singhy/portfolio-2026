@@ -17,9 +17,9 @@ function LinkedInIcon({ size = 18 }: { size?: number }) {
 }
 
 const socials = [
-  { icon: GitHubIcon, href: "https://github.com/kushsinghy", label: "GitHub" },
-  { icon: LinkedInIcon, href: "https://linkedin.com/in/kushsinghy", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:kush@example.com", label: "Email" },
+  { icon: GitHubIcon, href: "https://github.com/kush-singhy", label: "GitHub" },
+  { icon: LinkedInIcon, href: "https://www.linkedin.com/in/kush-singhy/", label: "LinkedIn" },
+  { icon: Mail, href: "mailto:kushsinghy02@gmail.com", label: "Email" },
 ];
 
 export function Footer() {

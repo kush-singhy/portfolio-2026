@@ -5,7 +5,7 @@ import { BlogPreview } from "@/components/blog-preview";
 import { getStravaData, type StravaData } from "@/lib/strava";
 
 export default async function Home() {
-  let stravaData: StravaData = { recentRuns: [], personalBests: [] };
+  let stravaData: StravaData = { recentRuns: [], personalBests: [], recentRaces: [] };
 
   try {
     if (process.env.STRAVA_CLIENT_ID) {
@@ -20,7 +20,7 @@ export default async function Home() {
       <Hero />
       <Timeline />
       <RunsSection
-        recentRuns={stravaData.recentRuns}
+        recentRaces={stravaData.recentRaces}
         personalBests={stravaData.personalBests}
       />
       <BlogPreview />

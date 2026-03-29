@@ -5,6 +5,7 @@ export interface StravaActivity {
   moving_time: number; // seconds
   elapsed_time: number;
   type: string;
+  sport_type?: string; // "Run", "TrailRun", etc.
   start_date: string;
   average_speed: number;
   max_speed: number;
@@ -12,6 +13,7 @@ export interface StravaActivity {
   max_heartrate?: number;
   total_elevation_gain: number;
   suffer_score?: number;
+  workout_type?: number; // 0=default, 1=race, 2=long run, 3=workout
 }
 
 export interface PersonalBest {
@@ -24,6 +26,7 @@ export interface PersonalBest {
 export interface StravaData {
   recentRuns: StravaActivity[];
   personalBests: PersonalBest[];
+  recentRaces: StravaActivity[];
 }
 
 const STRAVA_API = "https://www.strava.com/api/v3";
@@ -91,7 +94,7 @@ async function fetchStravaData(): Promise<StravaData> {
     const activities: StravaActivity[] = await res.json();
     if (activities.length === 0) break;
 
-    allRuns.push(...activities.filter((a) => a.type === "Run"));
+    allRuns.push(...activities.filter((a) => a.type === "Run" || a.type === "TrailRun" || a.sport_type === "TrailRun"));
     page++;
   }
 
@@ -102,7 +105,12 @@ async function fetchStravaData(): Promise<StravaData> {
 
   const personalBests = computePersonalBests(allRuns);
 
-  return { recentRuns, personalBests };
+  // Races: workout_type === 1
+  const recentRaces = allRuns
+    .filter((r) => r.workout_type === 1)
+    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+
+  return { recentRuns, personalBests, recentRaces };
 }
 
 interface PBDistance {
@@ -114,7 +122,7 @@ interface PBDistance {
 const PB_DISTANCES: PBDistance[] = [
   { label: "5K", meters: 5000, tolerance: 200 },
   { label: "10K", meters: 10000, tolerance: 400 },
-  { label: "Half Marathon", meters: 21097, tolerance: 500 },
+  { label: "Half Mara", meters: 21097, tolerance: 500 },
   { label: "Marathon", meters: 42195, tolerance: 1000 },
 ];
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   type StravaActivity,
   type PersonalBest,
@@ -6,7 +7,7 @@ import {
   formatDuration,
   formatDate,
 } from "@/lib/strava";
-import { Activity, Trophy, Clock, TrendingUp } from "lucide-react";
+import { Flag, Trophy, Clock, TrendingUp } from "lucide-react";
 
 function PersonalBests({ pbs }: { pbs: PersonalBest[] }) {
   if (pbs.length === 0) {
@@ -39,11 +40,11 @@ function PersonalBests({ pbs }: { pbs: PersonalBest[] }) {
   );
 }
 
-function RecentRunCard({ run }: { run: StravaActivity }) {
+function RaceCard({ run }: { run: StravaActivity }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-border last:border-0">
       <div className="flex items-center gap-3 min-w-0">
-        <Activity size={16} className="text-accent shrink-0" />
+        <Flag size={16} className="text-accent shrink-0" />
         <div className="min-w-0">
           <p className="font-medium text-sm truncate">{run.name}</p>
           <p className="text-xs text-muted">{formatDate(run.start_date)}</p>
@@ -67,11 +68,11 @@ function RecentRunCard({ run }: { run: StravaActivity }) {
 }
 
 interface RunsSectionProps {
-  recentRuns: StravaActivity[];
+  recentRaces: StravaActivity[];
   personalBests: PersonalBest[];
 }
 
-export function RunsSection({ recentRuns, personalBests }: RunsSectionProps) {
+export function RunsSection({ recentRaces, personalBests }: RunsSectionProps) {
   return (
     <section className="py-12">
       <h2 className="font-serif text-2xl font-normal tracking-tight mb-6">Runs</h2>
@@ -82,20 +83,25 @@ export function RunsSection({ recentRuns, personalBests }: RunsSectionProps) {
       <PersonalBests pbs={personalBests} />
 
       <h3 className="text-sm font-medium text-muted uppercase tracking-wide mt-8 mb-3">
-        Recent Runs
+        Recent Races
       </h3>
-      {recentRuns.length > 0 ? (
+      {recentRaces.length > 0 ? (
         <div>
-          {recentRuns.map((run) => (
-            <RecentRunCard key={run.id} run={run} />
+          {recentRaces.slice(0, 5).map((race) => (
+            <RaceCard key={race.id} run={race} />
           ))}
         </div>
       ) : (
         <p className="text-sm text-muted">
-          No recent runs to display. Connect your Strava account to see your
-          latest activities.
+          No races found yet.
         </p>
       )}
+      <Link
+        href="/runs"
+        className="inline-block mt-4 text-sm text-accent hover:text-accent-hover transition-colors"
+      >
+        See more &rarr;
+      </Link>
     </section>
   );
 }
