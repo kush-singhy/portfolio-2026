@@ -2,27 +2,13 @@ import { Hero } from "@/components/hero";
 import { Timeline } from "@/components/timeline";
 import { RunsSection } from "@/components/runs";
 import { BlogPreview } from "@/components/blog-preview";
-import { getStravaData, type StravaData } from "@/lib/strava";
 
-export default async function Home() {
-  let stravaData: StravaData = { recentRuns: [], personalBests: [], recentRaces: [] };
-
-  try {
-    if (process.env.STRAVA_CLIENT_ID) {
-      stravaData = await getStravaData();
-    }
-  } catch (error) {
-    console.error("Failed to fetch Strava data:", error);
-  }
-
+export default function Home() {
   return (
     <div className="max-w-2xl mx-auto px-6">
       <Hero />
       <Timeline />
-      <RunsSection
-        recentRaces={stravaData.recentRaces}
-        personalBests={stravaData.personalBests}
-      />
+      <RunsSection />
       <BlogPreview />
     </div>
   );

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   type StravaActivity,
   type PersonalBest,
@@ -10,15 +9,12 @@ import {
   formatDate,
 } from "@/lib/strava";
 import { useStravaData } from "@/lib/use-strava-data";
-import { Flag, Trophy, Clock, TrendingUp } from "lucide-react";
+import { Mountain, SportShoe, Trophy, Clock, TrendingUp } from "lucide-react";
+import { ExpandableRaces } from "@/components/expandable-races";
 
 function PersonalBests({ pbs }: { pbs: PersonalBest[] }) {
   if (pbs.length === 0) {
-    return (
-      <p className="text-sm text-muted">
-        No personal bests yet.
-      </p>
-    );
+    return <p className="text-sm text-muted">No personal bests yet.</p>;
   }
 
   return (
@@ -43,11 +39,24 @@ function PersonalBests({ pbs }: { pbs: PersonalBest[] }) {
   );
 }
 
-function RaceCard({ run }: { run: StravaActivity }) {
+function isTrailRun(run: StravaActivity): boolean {
+  if (run.sport_type === "TrailRun") return true;
+  if (run.type === "TrailRun") return true;
+  return /trail/i.test(run.name);
+}
+
+function RunIcon({ run }: { run: StravaActivity }) {
+  if (isTrailRun(run)) {
+    return <Mountain size={16} className="text-accent shrink-0" />;
+  }
+  return <SportShoe size={16} className="text-accent shrink-0" />;
+}
+
+function RunRow({ run }: { run: StravaActivity }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-border last:border-0">
       <div className="flex items-center gap-3 min-w-0">
-        <Flag size={16} className="text-accent shrink-0" />
+        <RunIcon run={run} />
         <div className="min-w-0">
           <p className="font-medium text-sm truncate">{run.name}</p>
           <p className="text-xs text-muted">{formatDate(run.start_date)}</p>
@@ -87,7 +96,7 @@ function LoadingPBs() {
 function LoadingRows() {
   return (
     <div>
-      {[1, 2, 3].map((i) => (
+      {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="flex items-center justify-between py-3 border-b border-border last:border-0 animate-pulse">
           <div className="flex items-center gap-3">
             <div className="w-4 h-4 bg-border rounded" />
@@ -102,40 +111,42 @@ function LoadingRows() {
   );
 }
 
-export function RunsSection() {
+export function RunsPageContent() {
   const { data, loading } = useStravaData();
 
   return (
-    <section className="py-12">
-      <h2 className="font-serif text-2xl font-normal tracking-tight mb-6">Runs</h2>
-
-      <h3 className="text-sm font-medium text-muted uppercase tracking-wide mb-3">
+    <>
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wide mb-3">
         Personal Bests
-      </h3>
+      </h2>
       {loading ? <LoadingPBs /> : <PersonalBests pbs={data.personalBests} />}
 
-      <h3 className="text-sm font-medium text-muted uppercase tracking-wide mt-8 mb-3">
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wide mt-10 mb-3">
         Recent Races
-      </h3>
+      </h2>
       {loading ? (
         <LoadingRows />
-      ) : data.recentRaces.length > 0 ? (
+      ) : (
+        <ExpandableRaces races={data.recentRaces} />
+      )}
+
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wide mt-10 mb-3">
+        Recent Runs
+      </h2>
+      {loading ? (
+        <LoadingRows />
+      ) : data.recentRuns.length > 0 ? (
         <div>
-          {data.recentRaces.slice(0, 5).map((race) => (
-            <RaceCard key={race.id} run={race} />
+          {data.recentRuns.map((run) => (
+            <RunRow key={run.id} run={run} />
           ))}
         </div>
       ) : (
         <p className="text-sm text-muted">
-          No races found yet.
+          No recent runs to display. Connect your Strava account to see your
+          latest activities.
         </p>
       )}
-      <Link
-        href="/runs"
-        className="inline-block mt-4 text-sm text-accent hover:text-accent-hover transition-colors"
-      >
-        See more &rarr;
-      </Link>
-    </section>
+    </>
   );
 }
