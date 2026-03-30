@@ -37,7 +37,7 @@ function setCachedData(data: StravaData): void {
   }
 }
 
-const EMPTY: StravaData = { recentRuns: [], personalBests: [], recentRaces: [] };
+const EMPTY: StravaData = { recentRuns: [], personalBests: [], recentRaces: [], monthlyMileage: [] };
 
 export function useStravaData() {
   const [data, setData] = useState<StravaData>(EMPTY);

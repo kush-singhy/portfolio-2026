@@ -23,10 +23,17 @@ export interface PersonalBest {
   date: string;
 }
 
+export interface MonthlyMileage {
+  month: string; // e.g. "Aug"
+  year: number;
+  km: number;
+}
+
 export interface StravaData {
   recentRuns: StravaActivity[];
   personalBests: PersonalBest[];
   recentRaces: StravaActivity[];
+  monthlyMileage: MonthlyMileage[];
 }
 
 const STRAVA_API = "https://www.strava.com/api/v3";
@@ -111,7 +118,46 @@ async function fetchStravaData(): Promise<StravaData> {
     .filter((r) => r.workout_type === 1)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
-  return { recentRuns, personalBests, recentRaces };
+  const monthlyMileage = computeMonthlyMileage(allRuns, 8);
+
+  return { recentRuns, personalBests, recentRaces, monthlyMileage };
+}
+
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function monthKey(year: number, month: number): string {
+  return `${year}-${month}`;
+}
+
+function computeMonthlyMileage(runs: StravaActivity[], months: number): MonthlyMileage[] {
+  const now = new Date();
+  const result: MonthlyMileage[] = [];
+  const lookup = new Map<string, MonthlyMileage>();
+
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const entry: MonthlyMileage = {
+      month: MONTH_NAMES[d.getMonth()],
+      year: d.getFullYear(),
+      km: 0,
+    };
+    result.push(entry);
+    lookup.set(monthKey(d.getFullYear(), d.getMonth()), entry);
+  }
+
+  for (const run of runs) {
+    const runDate = new Date(run.start_date);
+    const entry = lookup.get(monthKey(runDate.getFullYear(), runDate.getMonth()));
+    if (entry) {
+      entry.km += run.distance / 1000;
+    }
+  }
+
+  for (const m of result) {
+    m.km = Math.round(m.km * 10) / 10;
+  }
+
+  return result;
 }
 
 interface PBDistance {

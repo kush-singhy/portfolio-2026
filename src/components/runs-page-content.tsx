@@ -11,6 +11,7 @@ import {
 import { useStravaData } from "@/lib/use-strava-data";
 import { Mountain, SportShoe, Trophy, Clock, TrendingUp } from "lucide-react";
 import { ExpandableRaces } from "@/components/expandable-races";
+import { MileageChart, MileageChartLoading } from "@/components/mileage-chart";
 
 function PersonalBests({ pbs }: { pbs: PersonalBest[] }) {
   if (pbs.length === 0) {
@@ -117,6 +118,11 @@ export function RunsPageContent() {
   return (
     <>
       <h2 className="text-sm font-medium text-muted uppercase tracking-wide mb-3">
+        Monthly Mileage
+      </h2>
+      {loading ? <MileageChartLoading /> : <MileageChart data={data.monthlyMileage} />}
+
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wide mt-10 mb-3">
         Personal Bests
       </h2>
       {loading ? <LoadingPBs /> : <PersonalBests pbs={data.personalBests} />}
