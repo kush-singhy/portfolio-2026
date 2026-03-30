@@ -8,8 +8,8 @@
   --muted: #8C8478;
   --border: #E3DED7;
   --card: #F0EBE4;
-  --accent: #DA7756;
-  --accent-hover: #C4623F;
+  --accent: #3A9DB5;
+  --accent-hover: #2D8298;
 }
 
 .dark {
@@ -18,8 +18,8 @@
   --muted: #A8A8A3;
   --border: #424242;
   --card: #393939;
-  --accent: #E07A53;
-  --accent-hover: #EE9A7B;
+  --accent: #4DB8CF;
+  --accent-hover: #6DC9DC;
 }
 
 @theme inline {
