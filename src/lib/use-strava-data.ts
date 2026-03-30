@@ -22,7 +22,9 @@ function getCachedData(): StravaData | null {
       return null;
     }
 
-    return cached.data;
+    const data = cached.data;
+    if (!data.monthlyMileage) return null;
+    return data;
   } catch {
     return null;
   }
