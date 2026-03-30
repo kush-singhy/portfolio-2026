@@ -37,7 +37,7 @@ export function MileageChart({ data }: { data: MonthlyMileage[] }) {
           </span>
         </div>
       )}
-      <div className="flex items-end gap-1 sm:gap-2">
+      <div className="flex items-end gap-1 sm:gap-2 pt-5">
         {chartData.map((m, i) => {
           const height = (m.km / maxKm) * 100;
           return (
@@ -46,15 +46,18 @@ export function MileageChart({ data }: { data: MonthlyMileage[] }) {
               className="flex-1 min-w-0 flex flex-col items-center gap-1"
             >
               <div
-                className="w-full h-28 sm:h-32 flex flex-col items-center justify-end"
+                className="w-full h-28 sm:h-32 relative"
                 onMouseMove={(e) => setHover({ x: e.clientX, y: e.clientY, index: i })}
                 onMouseLeave={() => setHover(null)}
               >
-                <span className="text-[9px] sm:text-[10px] tabular-nums text-muted whitespace-nowrap mb-0.5">
+                <span
+                  className="absolute left-1/2 -translate-x-1/2 text-[9px] sm:text-[10px] tabular-nums text-muted whitespace-nowrap"
+                  style={{ bottom: `${Math.max(height, 1.5)}%`, marginBottom: '2px' }}
+                >
                   {Math.round(m.km)}
                 </span>
                 <div
-                  className="w-full rounded-t-md bg-accent/80 hover:bg-accent transition-colors min-h-[2px]"
+                  className="absolute bottom-0 w-full rounded-t-md bg-accent/80 hover:bg-accent transition-colors min-h-[2px]"
                   style={{ height: `${Math.max(height, 1.5)}%` }}
                 />
               </div>
