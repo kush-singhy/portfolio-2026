@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import type { StravaData } from "./strava";
 
-const CACHE_KEY = "strava-data";
+const CACHE_KEY = "strava-data-v2";
 const CACHE_TTL = 12 * 60 * 60 * 1000; // 12 hours
 
 interface CachedData {

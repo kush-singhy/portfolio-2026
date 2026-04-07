@@ -6,6 +6,7 @@ import {
   type PersonalBest,
   formatDistance,
   formatPace,
+  formatPaceFromSeconds,
   formatDuration,
   formatDate,
 } from "@/lib/strava";
@@ -56,14 +57,16 @@ function RaceCard({ run }: { run: StravaActivity }) {
       <div className="flex items-center gap-4 text-sm tabular-nums shrink-0">
         <span className="flex items-center gap-1 text-muted">
           <TrendingUp size={14} />
-          {formatDistance(run.distance)}
+          {run.raceLabel ?? formatDistance(run.distance)}
         </span>
         <span className="flex items-center gap-1 text-muted">
           <Clock size={14} />
-          {formatDuration(run.moving_time)}
+          {formatDuration(run.bestEffortTime ?? run.moving_time)}
         </span>
         <span className="hidden sm:inline text-muted">
-          {formatPace(run.average_speed)}
+          {run.bestEffortPace != null
+            ? formatPaceFromSeconds(run.bestEffortPace)
+            : formatPace(run.average_speed)}
         </span>
       </div>
     </div>

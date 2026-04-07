@@ -14,6 +14,9 @@ export interface StravaActivity {
   total_elevation_gain: number;
   suffer_score?: number;
   workout_type?: number; // 0=default, 1=race, 2=long run, 3=workout
+  raceLabel?: string | null; // e.g. "10K", "Half Marathon" — set for races that snap to a standard distance
+  bestEffortTime?: number | null; // scaled time in seconds for the standard distance
+  bestEffortPace?: number | null; // seconds per km for the standard distance
 }
 
 export interface PersonalBest {
@@ -118,6 +121,10 @@ async function fetchStravaData(): Promise<StravaData> {
     .filter((r) => r.workout_type === 1)
     .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
 
+  for (const race of recentRaces) {
+    computeRaceDisplay(race);
+  }
+
   const monthlyMileage = computeMonthlyMileage(allRuns, 8);
 
   return { recentRuns, personalBests, recentRaces, monthlyMileage };
@@ -158,6 +165,45 @@ function computeMonthlyMileage(runs: StravaActivity[], months: number): MonthlyM
   }
 
   return result;
+}
+
+const RACE_DISTANCES = [
+  { label: "5K", meters: 5000 },
+  { label: "10K", meters: 10000 },
+  { label: "15K", meters: 15000 },
+  { label: "10 Mile", meters: 16093 },
+  { label: "Half Marathon", meters: 21097 },
+  { label: "30K", meters: 30000 },
+  { label: "Marathon", meters: 42195 },
+];
+
+const RACE_SNAP_TOLERANCE = 0.05; // 5%
+
+function computeRaceDisplay(activity: StravaActivity): void {
+  let closest: (typeof RACE_DISTANCES)[number] | null = null;
+  let closestDiff = Infinity;
+
+  for (const rd of RACE_DISTANCES) {
+    const diff = Math.abs(activity.distance - rd.meters);
+    if (diff / rd.meters <= RACE_SNAP_TOLERANCE && diff < closestDiff) {
+      closest = rd;
+      closestDiff = diff;
+    }
+  }
+
+  if (!closest) {
+    activity.raceLabel = null;
+    activity.bestEffortTime = null;
+    activity.bestEffortPace = null;
+    return;
+  }
+
+  const scaledTime = (closest.meters / activity.distance) * activity.moving_time;
+  const paceSecondsPerKm = scaledTime / (closest.meters / 1000);
+
+  activity.raceLabel = closest.label;
+  activity.bestEffortTime = Math.round(scaledTime);
+  activity.bestEffortPace = paceSecondsPerKm;
 }
 
 interface PBDistance {
@@ -226,7 +272,7 @@ export function formatPace(metersPerSecond: number): string {
   return `${minutes}:${seconds.toString().padStart(2, "0")} /km`;
 }
 
-function formatPaceFromSeconds(secondsPerKm: number): string {
+export function formatPaceFromSeconds(secondsPerKm: number): string {
   const minutes = Math.floor(secondsPerKm / 60);
   const seconds = Math.round(secondsPerKm % 60);
   return `${minutes}:${seconds.toString().padStart(2, "0")} /km`;
